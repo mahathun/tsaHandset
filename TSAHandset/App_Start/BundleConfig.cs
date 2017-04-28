@@ -23,9 +23,17 @@ namespace TSAHandset
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap_material_js").Include(
+                      "~/Scripts/material.js",
+                      "~/Scripts/ripples.js"));
+
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/bootstrap_material_css").Include(
+                      "~/Content/bootstrap-material-design.css",
+                      "~/Content/ripples.css"));
         }
     }
 }
