@@ -7,6 +7,7 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    padding-top: 30px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -21,4 +22,15 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.mainSideBar {
+   background-color: #3f51b5;
+   height:100%;
+   padding:2em;
+   position:fixed;
+}
+
+.sidebarLogo{
+    margin:auto;
 }
