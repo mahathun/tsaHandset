@@ -223,11 +223,31 @@
     <Compile Include="Migrations\201704291336089_seedingHandsets.Designer.cs">
       <DependentUpon>201704291336089_seedingHandsets.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704291920531_addedRequstTypeandRelatedTables.cs" />
+    <Compile Include="Migrations\201704291920531_addedRequstTypeandRelatedTables.Designer.cs">
+      <DependentUpon>201704291920531_addedRequstTypeandRelatedTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704291926063_seedProgressLevels.cs" />
+    <Compile Include="Migrations\201704291926063_seedProgressLevels.Designer.cs">
+      <DependentUpon>201704291926063_seedProgressLevels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704291938266_changedPropTypeofRequestTypeNameToString.cs" />
+    <Compile Include="Migrations\201704291938266_changedPropTypeofRequestTypeNameToString.Designer.cs">
+      <DependentUpon>201704291938266_changedPropTypeofRequestTypeNameToString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704291938557_seedingRequestTypes.cs" />
+    <Compile Include="Migrations\201704291938557_seedingRequestTypes.Designer.cs">
+      <DependentUpon>201704291938557_seedingRequestTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdalTokenCache.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\Handset.cs" />
     <Compile Include="Models\Plan.cs" />
+    <Compile Include="Models\ProgressLevel.cs" />
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\RequestType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -310,6 +330,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704291336089_seedingHandsets.resx">
       <DependentUpon>201704291336089_seedingHandsets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704291920531_addedRequstTypeandRelatedTables.resx">
+      <DependentUpon>201704291920531_addedRequstTypeandRelatedTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704291926063_seedProgressLevels.resx">
+      <DependentUpon>201704291926063_seedProgressLevels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704291938266_changedPropTypeofRequestTypeNameToString.resx">
+      <DependentUpon>201704291938266_changedPropTypeofRequestTypeNameToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704291938557_seedingRequestTypes.resx">
+      <DependentUpon>201704291938557_seedingRequestTypes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
