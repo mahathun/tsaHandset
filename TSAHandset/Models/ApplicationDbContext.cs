@@ -10,6 +10,8 @@ namespace TSAHandset.Models
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Plan> Plans { get; set; }
+        public DbSet<Handset> Handsets { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection")
         {
