@@ -22,8 +22,16 @@
                 {
                     <div class="radio">
                         <label>
+                            @if (Model.RequestTypes[i].Id == 1)
+                            {
+                                @Html.RadioButtonFor(m => m.Request.RequestTypeId, Model.RequestTypes[i].Id, (Model.RequestTypes[i].Id == 1) ? new { @checked = "true", onchange = "changeRequestType(this)" } : null) @Model.RequestTypes[i].RequestTypeName
 
-                            @Html.RadioButtonFor(m => m.Request.RequestTypeId, Model.RequestTypes[i].Id) @Model.RequestTypes[i].RequestTypeName
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(m => m.Request.RequestTypeId, Model.RequestTypes[i].Id, (Model.RequestTypes[i].Id == 1) ? null: new { onchange = "changeRequestType(this)" }) @Model.RequestTypes[i].RequestTypeName
+
+                            }
 
 
                         </label>
@@ -33,7 +41,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="handsetsSection" style="display:none;">
             <label class="col-md-2 control-label">Handset</label>
 
             <div class="col-md-10 text-center">
@@ -42,7 +50,7 @@
                 {
                     <div class="col-md-6 radio">
                         <label style="text-align:left;">
-                            @Html.RadioButtonFor(m => m.Request.HandsetId, handset.Id)
+                            @Html.RadioButtonFor(m => m.Request.HandsetId, handset.Id, (handset.Id==1)? new { @checked="true" }:null)
 
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -72,7 +80,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="plansSection">
             <label class="col-md-2 control-label">Plan</label>
 
             <div class="col-md-10 text-center">
@@ -83,7 +91,7 @@
 
                     <div class="col-md-6 radio">
                         <label style="text-align:left;">
-                            @Html.RadioButtonFor(m => m.Request.PlanId, plan.Id)
+                            @Html.RadioButtonFor(m => m.Request.PlanId, plan.Id, (plan.Id==1)?new { @checked="true" }:null)
                             <div class="panel panel-default">
                                 <div class="panel-heading">@plan.Name Plan</div>
                                 <div class="panel-body text-center">
@@ -153,3 +161,26 @@
    }
 </div>
 
+@section scripts{ 
+    <script>
+        function changeRequestType(el) {
+            
+            switch ($(el)[0].value) {
+                case "1":
+                    $('#plansSection').show();
+                    $('#handsetsSection').hide();
+                    break;
+                case "2":
+                    $('#plansSection').hide();
+                    $('#handsetsSection').show();
+                    break;
+                case "3":
+                    $('#plansSection').show();
+                    $('#handsetsSection').show();
+                    break;
+            }
+            
+
+        }
+    </script>
+}

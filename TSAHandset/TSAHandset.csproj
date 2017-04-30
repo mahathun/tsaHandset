@@ -240,6 +240,10 @@
     <Compile Include="Migrations\201704291938557_seedingRequestTypes.Designer.cs">
       <DependentUpon>201704291938557_seedingRequestTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704300919381_changedSomePropertiesToNullableInRequests.cs" />
+    <Compile Include="Migrations\201704300919381_changedSomePropertiesToNullableInRequests.Designer.cs">
+      <DependentUpon>201704300919381_changedSomePropertiesToNullableInRequests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdalTokenCache.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -345,6 +349,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704291938557_seedingRequestTypes.resx">
       <DependentUpon>201704291938557_seedingRequestTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704300919381_changedSomePropertiesToNullableInRequests.resx">
+      <DependentUpon>201704300919381_changedSomePropertiesToNullableInRequests.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
