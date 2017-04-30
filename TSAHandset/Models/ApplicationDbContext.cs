@@ -12,6 +12,7 @@ namespace TSAHandset.Models
         public DbSet<Plan> Plans { get; set; }
         public DbSet<Handset> Handsets { get; set; }
         public DbSet<Request> Requests { get; set; }
+        public DbSet<RequestType> RequestTypes { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection")

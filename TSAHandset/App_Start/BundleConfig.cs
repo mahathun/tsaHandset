@@ -28,12 +28,14 @@ namespace TSAHandset
                       "~/Scripts/ripples.js"));
 
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new StyleBundle("~/Content/dist").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
-            bundles.Add(new StyleBundle("~/Content/bootstrap_material_css").Include(
                       "~/Content/bootstrap-material-design.css",
-                      "~/Content/ripples.css"));
+                      "~/Content/ripples.css"
+                     ));
+            bundles.Add(new StyleBundle("~/Content/custom_css").Include(
+                      "~/Content/site.css"
+                      ));
         }
     }
 }

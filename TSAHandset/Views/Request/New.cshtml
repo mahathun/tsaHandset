@@ -1,0 +1,155 @@
+﻿@model TSAHandset.ViewModel.RequestFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Submit a New Request</h2>
+
+<div class="jumbotron">
+   @using (Html.BeginForm("Submit", "Request"))
+   {
+
+    <div class="form-horizontal">
+
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Request type</label>
+
+            <div class="col-md-10">
+
+                @for (var i = 0; i < Model.RequestTypes.Count; i++)
+                {
+                    <div class="radio">
+                        <label>
+
+                            @Html.RadioButtonFor(m => m.Request.RequestTypeId, Model.RequestTypes[i].Id) @Model.RequestTypes[i].RequestTypeName
+
+
+                        </label>
+                    </div>
+
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Handset</label>
+
+            <div class="col-md-10 text-center">
+
+                @foreach (var handset in Model.Handsets)
+                {
+                    <div class="col-md-6 radio">
+                        <label style="text-align:left;">
+                            @Html.RadioButtonFor(m => m.Request.HandsetId, handset.Id)
+
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="col-sm-3">
+
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <h3>@handset.Make</h3>
+                                        <h4>@handset.Model</h4>
+                                        <a href="#" class="btn btn-xs btn-danger"><i class="material-icons">tune</i> View Specs</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </label>
+                    </div>
+
+                }
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Plan</label>
+
+            <div class="col-md-10 text-center">
+
+                @foreach (var plan in Model.Plans)
+                {
+
+
+                    <div class="col-md-6 radio">
+                        <label style="text-align:left;">
+                            @Html.RadioButtonFor(m => m.Request.PlanId, plan.Id)
+                            <div class="panel panel-default">
+                                <div class="panel-heading">@plan.Name Plan</div>
+                                <div class="panel-body text-center">
+                                    <h4>$ @plan.MonthlyCharge / mo </h4>
+
+                                    @if (plan.MonthlyDataAllowanceInGB == -1)
+                                    {
+                                        <h4>Unlimited Data</h4>;
+                                    }
+                                    else
+                                    {
+                                        <h4>@plan.MonthlyDataAllowanceInGB GB/ mo</h4>
+                                    }
+
+                                    @if (plan.MonthlyMinuteAllowance == -1)
+                                    {
+                                        <h4>Unlimited Minutes</h4>;
+                                    }
+                                    else
+                                    {
+                                        <h4>@plan.MonthlyMinuteAllowance Minutes/ mo</h4>
+                                    }
+
+                                    @if (plan.MonthlyTextAllowance == -1)
+                                    {
+                                        <h4>Unlimited Texts</h4>;
+                                    }
+                                    else
+                                    {
+                                        <h4>@plan.MonthlyTextAllowance Texts/ mo</h4>
+                                    }
+
+                                    @if (plan.AccountCalling == 0)
+                                    {
+                                        <h4>Free on Account Calling</h4>;
+                                    }
+                                    else
+                                    {
+                                        <h4>$ @plan.AccountCalling on account calling</h4>
+                                    }
+
+                                    <h4></h4>
+                                </div>
+                            </div>
+
+                        </label>
+                    </div>
+
+                }
+
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10 col-md-offset-2">
+
+                <button type="submit" class="btn btn-raised btn-danger"><i class="material-icons">description</i> Submit</button>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+   }
+</div>
+

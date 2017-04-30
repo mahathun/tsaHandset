@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/dist")
     @Scripts.Render("~/bundles/modernizr")
     <!-- Material Design fonts -->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
 
-    <!-- Bootstrap Material Design -->
-    @Styles.Render("~/Content/bootstrap_material_css")
+    <!-- site css -->
+    @Styles.Render("~/Content/custom_css")
 </head>
 <body>
     @Html.Partial("_Navbar")
