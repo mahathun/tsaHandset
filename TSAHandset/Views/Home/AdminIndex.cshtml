@@ -1,0 +1,116 @@
+﻿
+@model TSAHandset.ViewModel.HomeViewModel
+
+@{
+    ViewBag.Title = "AdminIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6" style="text-align:center">
+            <a href="/Request/New" class="btn  btn-raised btn-danger">
+                <i class="material-icons">description</i><br />
+                New Request
+
+            </a>
+
+        </div>
+        <div class="col-md-6" style="text-align:center">
+            <a href="#" class="btn  btn-raised btn-danger">
+                <i class="material-icons">feedback</i><br />
+                Pending Request
+
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Overview</h2>
+    </div>
+    <div class="col-md-12">
+
+        <div class="col-md-4" style="text-align:center">
+            <a href="#" class="btn  btn-raised btn-info">
+                <div class="row tile">
+                        <div class="col-xs-4">
+                            <div><i class="material-icons">description</i></div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div><h4>@Model.AllRequests.Count</h4> Total Requests</div>
+                        </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4" style="text-align:center">
+            <a href="#" class="btn  btn-raised btn-primary">
+                <div class="row tile">
+                    <div class="col-xs-4">
+                        <div><i class="material-icons">thumbs_up_down</i></div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div><h4>@Model.PendingRequests.Count</h4> Pending Requests</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4" style="text-align:center">
+            <a href="#" class="btn  btn-raised btn-success">
+                <div class="row tile">
+                    <div class="col-xs-4">
+                        <div><i class="material-icons">thumb_up</i></div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div><h4>@Model.AcceptedRequests.Count</h4> Accepted Requests</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+    
+</div>
+<br/>
+
+<div class="row">
+   <div class="col-md-12">
+       <div class="row">
+           <div class="col-md-12">
+               <h2>All Requests</h2>
+           </div>
+       </div>
+
+       <div class="row">
+           <div class="col-md-12">
+               <table id="allRequests" class="table table-striped table-hover">
+                   <thead>
+                   <th>Name</th>
+                   <th>Requested Date</th>
+                   <th>Status</th>
+                   <th>Action</th>
+                   </thead>
+                   <tbody>
+                       @foreach (var requst in Model.AllRequests)
+                       {
+                           <tr>
+                               <td></td>
+                               <td>@requst.RequestDate.ToShortDateString()</td>
+                               <td>@requst.Progress.ProgressLevelName</td>
+                               <td></td>
+                           </tr>
+                       }
+
+
+                   </tbody>
+               </table>
+           </div>
+       </div>
+   </div>
+</div>
+

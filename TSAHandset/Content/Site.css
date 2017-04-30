@@ -40,3 +40,12 @@ textarea {
     padding-top:0px!important;
     margin-bottom:0px!important;
 }
+
+.tile div{
+    height:8em;
+    display:table-cell;
+    vertical-align:middle;
+}
+.tile div>i{
+    font-size:48px;
+}

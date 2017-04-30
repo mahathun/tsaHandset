@@ -40,6 +40,7 @@ namespace TSAHandset.Controllers
         }
 
 
+        //NEW REQUESTS
         public ActionResult New()
         {
 
@@ -55,6 +56,7 @@ namespace TSAHandset.Controllers
             return View(requestViewModel);
         }
 
+        //SAVING NEW REQUESTS
         public async Task<ActionResult> Submit(Request request)
         {
             if (!ModelState.IsValid)
