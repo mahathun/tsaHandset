@@ -34,7 +34,7 @@
     <div class="col-md-12">
 
         <div class="col-md-4" style="text-align:center">
-            <a href="#" class="btn btn-block btn-raised btn-info" onclick="showSection('all', this)">
+            <a href="#allRequestsSection" class="btn btn-block btn-raised btn-info" onclick="showSection('all', this)">
                 <div class="row tile">
                         <div class="col-xs-4">
                             <div><i class="material-icons">description</i></div>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="col-md-4" style="text-align:center">
-            <a href="#" class="btn btn-block btn-raised btn-primary" onclick="showSection('pending')">
+            <a href="#pendingRequestsSection" class="btn btn-block btn-raised btn-primary" onclick="showSection('pending')">
                 <div class="row tile">
                     <div class="col-xs-4">
                         <div><i class="material-icons">thumbs_up_down</i></div>
@@ -60,7 +60,7 @@
         </div>
 
         <div class="col-md-4" style="text-align:center">
-            <a href="#" class="btn btn-block btn-raised btn-success" onclick="showSection('accepted')">
+            <a href="#acceptedRequestsSection" class="btn btn-block btn-raised btn-success" onclick="showSection('accepted')">
                 <div class="row tile">
                     <div class="col-xs-4">
                         <div><i class="material-icons">thumb_up</i></div>
@@ -339,22 +339,22 @@
             switch (section) {
                 case 'all':
                     
-                    $("#allRequestsSection").show();
-                    $("#pendingRequestsSection").hide();
-                    $("#acceptedRequestsSection").hide();
+                    $("#allRequestsSection").show(200);
+                    $("#pendingRequestsSection").hide(200);
+                    $("#acceptedRequestsSection").hide(200);
 
                     
                     break;
                 case 'pending':
-                    $("#allRequestsSection").hide();
-                    $("#pendingRequestsSection").show();
-                    $("#acceptedRequestsSection").hide();
+                    $("#allRequestsSection").hide(200);
+                    $("#pendingRequestsSection").show(200);
+                    $("#acceptedRequestsSection").hide(200);
 
                     break;
                 case 'accepted':
-                    $("#allRequestsSection").hide();
-                    $("#pendingRequestsSection").hide();
-                    $("#acceptedRequestsSection").show();
+                    $("#allRequestsSection").hide(200);
+                    $("#pendingRequestsSection").hide(200);
+                    $("#acceptedRequestsSection").show(200);
 
                     break;
 
