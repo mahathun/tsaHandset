@@ -56,6 +56,7 @@ namespace TSAHandset.Controllers
 
                 var groupResult = await activeDirectoryClient1.Groups.Expand(u=>u.Owners).ExecuteAsync();
 
+                //current logged in user
                 IUser user = userResult.CurrentPage.ToList().First();
                 List<IGroup> groups = groupResult.CurrentPage.ToList();
 
@@ -90,14 +91,20 @@ namespace TSAHandset.Controllers
                         AllRequests = allRequestsAssignedToTheAdmin,
                         PendingRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 1).ToList(),
                         AcceptedRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 2).ToList(),
-                        RejectedRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 3).ToList()
+                        RejectedRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 3).ToList(),
+                        UserRequests = _context.Requests.Where(r=>r.RequestUserId == user.ObjectId).ToList()
                     };
                     
                     return View("AdminIndex", homeViewModel);
                 }
                 else
                 {
-                    return View();
+                    var requests = _context.Requests.Include("Progress").Where(r => r.RequestUserId == user.ObjectId).ToList();
+                    var homeViewModel = new HomeViewModel()
+                    {
+                        UserRequests = requests
+                    };
+                    return View("Index",homeViewModel);
                 }
 
             

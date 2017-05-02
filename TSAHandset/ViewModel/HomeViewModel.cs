@@ -12,6 +12,7 @@ namespace TSAHandset.ViewModel
         public List<Request> PendingRequests { get; set; }
         public List<Request> AcceptedRequests { get; set; }
         public List<Request> RejectedRequests { get; set; }
+        public List<Request> UserRequests { get; set; }
 
     }
 }
