@@ -9,7 +9,10 @@ namespace TSAHandset
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/DataTables/jquery.dataTables.js",
+                        "~/Scripts/DataTables/dataTables.bootstrap.js"
+                        ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -31,7 +34,8 @@ namespace TSAHandset
             bundles.Add(new StyleBundle("~/Content/dist").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap-material-design.css",
-                      "~/Content/ripples.css"
+                      "~/Content/ripples.css",
+                      "~/Content/DataTables/css/dataTables.bootstrap.css"
                      ));
             bundles.Add(new StyleBundle("~/Content/custom_css").Include(
                       "~/Content/site.css"

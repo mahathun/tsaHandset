@@ -9,7 +9,7 @@
 <div class="jumbotron">
     <div class="row">
         <div class="col-md-6" style="text-align:center">
-            <a href="/Request/New" class="btn  btn-raised btn-danger">
+            <a href="/Request/New" class="btn btn-block btn-raised btn-danger">
                 <i class="material-icons">description</i><br />
                 New Request
 
@@ -17,7 +17,7 @@
 
         </div>
         <div class="col-md-6" style="text-align:center">
-            <a href="#" class="btn  btn-raised btn-danger">
+            <a href="#" class="btn btn-block btn-raised btn-danger">
                 <i class="material-icons">feedback</i><br />
                 Pending Request
 
@@ -34,7 +34,7 @@
     <div class="col-md-12">
 
         <div class="col-md-4" style="text-align:center">
-            <a href="#" class="btn  btn-raised btn-info">
+            <a href="#" class="btn btn-block btn-raised btn-info" onclick="showSection('all', this)">
                 <div class="row tile">
                         <div class="col-xs-4">
                             <div><i class="material-icons">description</i></div>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="col-md-4" style="text-align:center">
-            <a href="#" class="btn  btn-raised btn-primary">
+            <a href="#" class="btn btn-block btn-raised btn-primary" onclick="showSection('pending')">
                 <div class="row tile">
                     <div class="col-xs-4">
                         <div><i class="material-icons">thumbs_up_down</i></div>
@@ -60,7 +60,7 @@
         </div>
 
         <div class="col-md-4" style="text-align:center">
-            <a href="#" class="btn  btn-raised btn-success">
+            <a href="#" class="btn btn-block btn-raised btn-success" onclick="showSection('accepted')">
                 <div class="row tile">
                     <div class="col-xs-4">
                         <div><i class="material-icons">thumb_up</i></div>
@@ -78,7 +78,8 @@
 </div>
 <br/>
 
-<div class="row">
+<!-- SECTION - all request -->
+<div class="row" id="allRequestsSection">
    <div class="col-md-12">
        <div class="row">
            <div class="col-md-12">
@@ -88,10 +89,11 @@
 
        <div class="row">
            <div class="col-md-12">
-               <table id="allRequests" class="table table-striped table-hover">
+               <table id="allRequestsTable" class="table table-striped table-hover">
                    <thead>
                    <th>Name</th>
                    <th>Requested Date</th>
+                   <th>Aporoved/rejected Date</th>
                    <th>Status</th>
                    <th>Action</th>
                    </thead>
@@ -99,10 +101,25 @@
                        @foreach (var requst in Model.AllRequests)
                        {
                            <tr>
-                               <td></td>
+                               <td>@requst.RequestUserName</td>
                                <td>@requst.RequestDate.ToShortDateString()</td>
+                               <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
                                <td>@requst.Progress.ProgressLevelName</td>
-                               <td></td>
+                               <td>
+                                   
+                                       
+                                   
+
+                                   <span class="input-group-btn">
+                                       <button type="button" id="approveRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-success" data-toggle="modal" data-target="#accept-request-dialog">
+                                           <i class="material-icons">thumb_up</i> Approve
+                                       </button>
+
+                                       <button type="button" id="rejectRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#reject-request-dialog">
+                                           <i class="material-icons">thumb_down</i> Reject
+                                       </button>
+                                   </span>
+                               </td>
                            </tr>
                        }
 
@@ -114,3 +131,235 @@
    </div>
 </div>
 
+<!-- SECTION - pending request -->
+<div class="row" id="pendingRequestsSection">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Pending Requests</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table id="pendingRequestsTable" class="table table-striped table-hover">
+                    <thead>
+                    <th>Name</th>
+                    <th>Requested Date</th>
+                    <th>Aporoved/rejected Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    </thead>
+                    <tbody>
+                        @foreach (var requst in Model.AllRequests)
+                        {
+                            if (requst.ProgressId==1)
+                            {
+                                <tr>
+                                    <td>@requst.RequestUserName</td>
+                                    <td>@requst.RequestDate.ToShortDateString()</td>
+                                    <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
+                                    <td>@requst.Progress.ProgressLevelName</td>
+                                    <td>
+
+
+
+
+                                        <span class="input-group-btn">
+                                            <button type="button" id="approveRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-success" data-toggle="modal" data-target="#accept-request-dialog">
+                                                <i class="material-icons">thumb_up</i> Approve
+                                            </button>
+
+                                            <button type="button" id="rejectRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#reject-request-dialog">
+                                                <i class="material-icons">thumb_down</i> Reject
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION - accepted request -->
+<div class="row" id="acceptedRequestsSection">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Accepted Requests</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table id="acceptedRequestsTable" class="table table-striped table-hover">
+                    <thead>
+                    <th>Name</th>
+                    <th>Requested Date</th>
+                    <th>Aporoved/rejected Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    </thead>
+                    <tbody>
+                        @foreach (var requst in Model.AllRequests)
+                        {
+                            if (requst.ProgressId == 2)
+                            {
+                                <tr>
+                                    <td>@requst.RequestUserName</td>
+                                    <td>@requst.RequestDate.ToShortDateString()</td>
+                                    <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
+                                    <td>@requst.Progress.ProgressLevelName</td>
+                                    <td>
+
+
+
+
+                                        <span class="input-group-btn">
+                                            <button type="button" id="approveRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-success" data-toggle="modal" data-target="#accept-request-dialog">
+                                                <i class="material-icons">thumb_up</i> Approve
+                                            </button>
+
+                                            <button type="button" id="rejectRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#reject-request-dialog">
+                                                <i class="material-icons">thumb_down</i> Reject
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- accept action modal-->
+<div id="accept-request-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Approve Request</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <div class="col-xs-12">
+                        <div class="col-xs-3">
+                            <i class="material-icons" style="color:#4caf50; font-size:5em;">live_help</i>
+
+                        </div>
+                        <div class="col-xs-9" style="height:5em;">
+                            <div style="position:relative;top:50%;transform:translateY(-50%)">Do you want to approve the requet?</div>
+
+                        </div>
+                    </div>
+                </p>
+            
+                
+
+            </div>
+            <div class="modal-footer">
+                <a id="requestAcceptActionLink" href="" class="btn btn-success btn-raised">Yes</a>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- reject action modal -->
+<div id="reject-request-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Approve Request</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <div class="col-xs-12">
+                        <div class="col-xs-3">
+                            <i class="material-icons" style="color:#f44336; font-size:5em;">live_help</i>
+
+                        </div>
+                        <div class="col-xs-9" style="height:5em;">
+                            <div style="position:relative;top:50%;transform:translateY(-50%)">Do you want to reject the requet?</div>
+
+                        </div>
+                    </div>
+                </p>
+                    
+                    
+                
+
+
+
+            </div>
+            <div class="modal-footer">
+                <a id="requestRejectActionLink" href="" class="btn btn-danger btn-raised">Yes</a>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            //initialising the datatables
+            $("#allRequestsTable").DataTable();
+            $("#pendingRequestsTable").DataTable();
+            $("#acceptedRequestsTable").DataTable();
+
+            //hiding the sections on initial load
+            $("#allRequestsSection").hide();
+            $("#pendingRequestsSection").hide();
+            $("#acceptedRequestsSection").hide();
+        });
+
+        function requestAction(el) {
+            $('#requestAcceptActionLink').attr('href', "/Request/AcceptRequest/" + $(el).data("id"));
+            $('#requestRejectActionLink').attr('href', "/Request/RejectRequest/" + $(el).data("id"));
+        }
+
+        function showSection(section,el) {
+
+            switch (section) {
+                case 'all':
+                    
+                    $("#allRequestsSection").show();
+                    $("#pendingRequestsSection").hide();
+                    $("#acceptedRequestsSection").hide();
+
+                    
+                    break;
+                case 'pending':
+                    $("#allRequestsSection").hide();
+                    $("#pendingRequestsSection").show();
+                    $("#acceptedRequestsSection").hide();
+
+                    break;
+                case 'accepted':
+                    $("#allRequestsSection").hide();
+                    $("#pendingRequestsSection").hide();
+                    $("#acceptedRequestsSection").show();
+
+                    break;
+
+            }
+        }
+        
+    </script>
+    }

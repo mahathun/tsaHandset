@@ -46,6 +46,7 @@ namespace TSAHandset.Controllers
 
             var requestViewModel = new RequestFormViewModel()
             {
+                
                 Request = new Request(),
                 Plans = _context.Plans.ToList(),
                 Handsets = _context.Handsets.ToList(),
@@ -92,38 +93,31 @@ namespace TSAHandset.Controllers
                     IUser user = result.CurrentPage.ToList().First();
 
                     var newRequest = new Request();
+                    newRequest.RequestUserId = user.ObjectId;
+                    newRequest.RequestUserName = (user.DisplayName.Length>0)? user.DisplayName: user.UserPrincipalName;
+                    newRequest.RequestDate = DateTime.Now;
+                    newRequest.ProgressId = 1;
+                    newRequest.RequestTypeId = request.RequestTypeId;
                     //if a valid request
                     switch (request.RequestTypeId)
                     {
                         case 1://connection only
-                            
-                            newRequest.RequestUserId = user.ObjectId;
+                           
                             newRequest.SecurityGroupId = user.MemberOf.CurrentPage.First().ObjectId;
                             newRequest.PlanId = request.PlanId;
-                            newRequest.RequestDate = DateTime.Now;
-                            newRequest.ProgressId = 1;
-                            newRequest.RequestTypeId = request.RequestTypeId;                     
 
                             break;
                         case 2://handset only
-
-                            newRequest.RequestUserId = user.ObjectId;
+                            
                             newRequest.SecurityGroupId = user.MemberOf.CurrentPage.First().ObjectId;
                             newRequest.HandsetId = request.HandsetId;
-                            newRequest.RequestDate = DateTime.Now;
-                            newRequest.ProgressId = 1;
-                            newRequest.RequestTypeId = request.RequestTypeId;
                             
                             break;
                         case 3://both connection and handset
-
-                            newRequest.RequestUserId = user.ObjectId;
+                            
                             newRequest.SecurityGroupId = user.MemberOf.CurrentPage.First().ObjectId;
                             newRequest.PlanId = request.PlanId;
                             newRequest.HandsetId = request.HandsetId;
-                            newRequest.RequestDate = DateTime.Now;
-                            newRequest.ProgressId = 1;
-                            newRequest.RequestTypeId = request.RequestTypeId;
 
                             break;
                         default:
@@ -149,6 +143,141 @@ namespace TSAHandset.Controllers
             }
 
          
+        }
+
+        //Managing the aproval action on a request
+        public async Task<ActionResult> AcceptRequest(int Id)
+        {
+            try
+            {
+                IUser currentUser = await GetLoggedInUser();
+                var request = _context.Requests.Where(r=>r.Id==Id).ToList().First();
+
+                var group = await GetGroup(request.SecurityGroupId);
+
+                
+
+                
+
+                foreach(var owner in group.Owners.CurrentPage.ToList())
+                {
+                    if(owner.ObjectId == currentUser.ObjectId)
+                    {
+                        //logged in user has permission to authorize
+                        request.ProgressId = 2; // request accepts
+                        request.ApprovedDate = DateTime.Now;
+
+                        _context.SaveChanges();
+                    }
+                   
+                }
+            }
+            catch (AdalException)
+            {
+                // Return to error page.
+
+                return View("Error");
+            }
+            // if the above failed, the user needs to explicitly re-authenticate for the app to obtain the required token
+            catch (Exception)
+            {
+                return RedirectToAction("Relogin", "UserProfile");
+
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        //Managing the reject action on a request
+        public async Task<ActionResult> RejectRequest(int Id)
+        {
+            try
+            {
+                IUser currentUser = await GetLoggedInUser();
+                var request = _context.Requests.Where(r => r.Id == Id).ToList().First();
+
+                var group = await GetGroup(request.SecurityGroupId);
+
+
+
+
+
+                foreach (var owner in group.Owners.CurrentPage.ToList())
+                {
+                    if (owner.ObjectId == currentUser.ObjectId)
+                    {
+                        //logged in user has permission to authorize
+                        request.ProgressId = 3; // request reject
+                        request.ApprovedDate = DateTime.Now;
+
+                        _context.SaveChanges();
+                    }
+
+                }
+            }
+            catch (AdalException)
+            {
+                // Return to error page.
+
+                return View("Error");
+            }
+            // if the above failed, the user needs to explicitly re-authenticate for the app to obtain the required token
+            catch (Exception)
+            {
+                return RedirectToAction("Relogin", "UserProfile");
+
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+        //GET the logged in User
+        private async Task<IUser> GetLoggedInUser()
+        {
+
+            string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+
+            ActiveDirectoryClient activeDirectoryClient = await GetActivieDirectoryClient();
+
+                // use the token for querying the graph to get the user details
+
+                var result = await activeDirectoryClient.Users
+                    .Where(u => u.ObjectId.Equals(userObjectID))
+                    .Expand(m => m.MemberOf)
+                    .ExecuteAsync();
+                IUser user = result.CurrentPage.ToList().First();
+
+                return user;
+            
+
+        }
+
+        //Get the activedirectory client token
+        private async Task<ActiveDirectoryClient> GetActivieDirectoryClient()
+        {
+
+            string tenantID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value;
+            string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+
+            Uri servicePointUri = new Uri(graphResourceID);
+            Uri serviceRoot = new Uri(servicePointUri, tenantID);
+            ActiveDirectoryClient activeDirectoryClient = new ActiveDirectoryClient(serviceRoot,
+                  async () => await GetTokenForApplication());
+
+            return activeDirectoryClient;
+        }
+        
+        //GET the Group
+        private async Task<IGroup> GetGroup(string groupObjectId)
+        {
+            
+            ActiveDirectoryClient activeDirectoryClient = await GetActivieDirectoryClient();
+            var groupResult = await activeDirectoryClient.Groups.Expand(g=>g.Owners).Where(g=>g.ObjectId == groupObjectId).ExecuteAsync();
+
+            
+
+            return groupResult.CurrentPage.ToList().First();
+
+
         }
 
         public async Task<string> GetTokenForApplication()

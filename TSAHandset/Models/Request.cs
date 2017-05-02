@@ -10,6 +10,7 @@ namespace TSAHandset.Models
     {
         public int Id { get; set; }
         public string RequestUserId { get; set; }
+        public string RequestUserName { get; set; }
         public string SecurityGroupId { get; set; }
         public Plan Plan { get; set; }
         public int? PlanId { get; set; }
