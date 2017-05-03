@@ -12,20 +12,6 @@
            
            </a>
 
-
-           @*<div class="btn-group" style="width:100%;height:100%">
-               <a href="bootstrap-elements.html" data-target="#" class="btn  btn-raised btn-danger btn-block dropdown-toggle" data-toggle="dropdown">
-                   <i class="material-icons">description</i><br />
-                   Dropdown
-                   <span class="caret"></span>
-               </a>
-               <ul class="dropdown-menu">
-                   <li><a href="javascript:void(0)">Dropdown link</a></li>
-                   <li><a href="javascript:void(0)">Dropdown link</a></li>
-                   <li><a href="javascript:void(0)">Dropdown link</a></li>
-               </ul>
-           </div>*@
-
        </div>
        
         <div class="col-md-6" style="text-align:center">
@@ -90,8 +76,8 @@
                 <table id="userRequestsTable" class="table table-striped table-hover">
                     <thead>
                     <th>Name</th>
-                    <th>Requested Date</th>
-                    <th>Aporoved/rejected Date</th>
+                    <th class="hidden-xs">Requested Date</th>
+                    <th class="hidden-xs">Aporoved/rejected Date</th>
                     <th>Status</th>
                   
                     </thead>
@@ -101,8 +87,8 @@
 
                                 <tr>
                                     <td>@requst.RequestUserName</td>
-                                    <td>@requst.RequestDate.ToShortDateString()</td>
-                                    <td>@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
+                                    <td class="hidden-xs">@requst.RequestDate.ToShortDateString()</td>
+                                    <td class="hidden-xs">@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
                                     <td>@requst.Progress.ProgressLevelName</td>
                                    
                                 </tr>
@@ -134,8 +120,8 @@
                     <table id="isgTeamRequestsTable" class="table table-striped table-hover">
                         <thead>
                         <th>Name</th>
-                        <th>Requested Date</th>
-                        <th>Aporoved Date</th>
+                        <th class="hidden-xs">Requested Date</th>
+                        <th class="hidden-xs">Aporoved Date</th>
                         <th>Status</th>
                         <th>Action</th>
                         </thead>
@@ -145,8 +131,8 @@
                           
                                     <tr>
                                         <td>@requst.RequestUserName</td>
-                                        <td>@requst.RequestDate.ToShortDateString()</td>
-                                        <td>@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
+                                        <td class="hidden-xs">@requst.RequestDate.ToShortDateString()</td>
+                                        <td class="hidden-xs">@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
                                         <td>@requst.Progress.ProgressLevelName</td>
                                         <td>
 
@@ -155,7 +141,7 @@
 
                                             <span class="input-group-btn">
                                                 <button type="button" id="completeRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-success" data-toggle="modal" data-target="#complete-request-dialog">
-                                                    <i class="material-icons">thumb_up</i> Complete
+                                                    <i class="material-icons">thumb_up</i> <span class=""> Complete</span>
                                                 </button>
 
                                                 

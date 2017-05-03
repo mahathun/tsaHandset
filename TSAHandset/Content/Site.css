@@ -88,3 +88,7 @@ textarea {
     color:red;
     font-size:.8em;
 }
+
+.actionSpan{
+    display:inline!important;
+}
