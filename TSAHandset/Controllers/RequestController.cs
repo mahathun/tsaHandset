@@ -14,15 +14,13 @@ using TSAHandset.ViewModel;
 namespace TSAHandset.Controllers
 {
     [Authorize]
-    public class RequestController : Controller
+    public class RequestController : BaseController
     {
 
         private ApplicationDbContext _context;
-        private string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
-        private string appKey = ConfigurationManager.AppSettings["ida:ClientSecret"];
-        private string aadInstance = ConfigurationManager.AppSettings["ida:AADInstance"];
-        private string graphResourceID = "https://graph.windows.net";
 
+
+        //constructor
         public RequestController()
         {
             _context = new ApplicationDbContext();
@@ -32,10 +30,9 @@ namespace TSAHandset.Controllers
             _context.Dispose();
         }
 
-        // GET: Request
+        // Landing page Request
         public ActionResult Index()
         {
-
             return HttpNotFound();
         }
 
@@ -76,22 +73,11 @@ namespace TSAHandset.Controllers
             }
             else
             {
-                string tenantID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value;
-                string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+              
                 try
                 {
-                    Uri servicePointUri = new Uri(graphResourceID);
-                    Uri serviceRoot = new Uri(servicePointUri, tenantID);
-                    ActiveDirectoryClient activeDirectoryClient = new ActiveDirectoryClient(serviceRoot,
-                          async () => await GetTokenForApplication());
-
                     // use the token for querying the graph to get the user details
-
-                    var result = await activeDirectoryClient.Users
-                        .Where(u => u.ObjectId.Equals(userObjectID))
-                        .Expand(m=>m.MemberOf)
-                        .ExecuteAsync();
-                    IUser user = result.CurrentPage.ToList().First();
+                    IUser user = await GetLoggedInUser();
 
                     var newRequest = new Request();
                     newRequest.RequestUserId = user.ObjectId;
@@ -155,11 +141,7 @@ namespace TSAHandset.Controllers
                 var request = _context.Requests.Where(r=>r.Id==Id).ToList().First();
 
                 var group = await GetGroup(request.SecurityGroupId);
-
                 
-
-                
-
                 foreach(var owner in group.Owners.CurrentPage.ToList())
                 {
                     if(owner.ObjectId == currentUser.ObjectId)
@@ -198,11 +180,7 @@ namespace TSAHandset.Controllers
                 var request = _context.Requests.Where(r => r.Id == Id).ToList().First();
 
                 var group = await GetGroup(request.SecurityGroupId);
-
-
-
-
-
+                
                 foreach (var owner in group.Owners.CurrentPage.ToList())
                 {
                     if (owner.ObjectId == currentUser.ObjectId)
@@ -231,68 +209,53 @@ namespace TSAHandset.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-        //GET the logged in User
-        private async Task<IUser> GetLoggedInUser()
+        
+        //Managing the complete action on a request
+        public async Task<ActionResult> CompleteRequest(int Id)
         {
 
-            string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            bool isISGMember = await isAnISGMember();
 
-            ActiveDirectoryClient activeDirectoryClient = await GetActivieDirectoryClient();
+            //if the current logged in user is not a member of the team iSG
+            if (!isISGMember)
+            {
+                return View("Unauthorized");
+            }
 
-                // use the token for querying the graph to get the user details
+            //var user = await GetLoggedInUser();
+            var request = _context.Requests.Where(r => r.Id == Id).ToList().First();
+            var existingConnections = _context.Connections.Where(c => c.UserId == request.RequestUserId).ToList();
 
-                var result = await activeDirectoryClient.Users
-                    .Where(u => u.ObjectId.Equals(userObjectID))
-                    .Expand(m => m.MemberOf)
-                    .ExecuteAsync();
-                IUser user = result.CurrentPage.ToList().First();
+            if(existingConnections.Count == 0)
+            {
+                //Create a new connection profile for the user as there are no existing connections
 
-                return user;
-            
+                var connection = new Connection()
+                {
+                    UserId = request.RequestUserId,
+                    PlanId = request.PlanId,
+                    HandsetId = request.HandsetId
+                };
 
-        }
+                _context.Connections.Add(connection);
+            }
+            else
+            {
+                //if there is an existing connection update it
+                var connection = existingConnections.First();
 
-        //Get the activedirectory client token
-        private async Task<ActiveDirectoryClient> GetActivieDirectoryClient()
-        {
+                connection.PlanId = request.PlanId;
+                connection.HandsetId = request.HandsetId;
 
-            string tenantID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value;
-            string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
 
-            Uri servicePointUri = new Uri(graphResourceID);
-            Uri serviceRoot = new Uri(servicePointUri, tenantID);
-            ActiveDirectoryClient activeDirectoryClient = new ActiveDirectoryClient(serviceRoot,
-                  async () => await GetTokenForApplication());
+            }
 
-            return activeDirectoryClient;
+            request.ProgressId = 4;//completed
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
         
-        //GET the Group
-        private async Task<IGroup> GetGroup(string groupObjectId)
-        {
-            
-            ActiveDirectoryClient activeDirectoryClient = await GetActivieDirectoryClient();
-            var groupResult = await activeDirectoryClient.Groups.Expand(g=>g.Owners).Where(g=>g.ObjectId == groupObjectId).ExecuteAsync();
-
-            
-
-            return groupResult.CurrentPage.ToList().First();
-
-
-        }
-
-        public async Task<string> GetTokenForApplication()
-        {
-            string signedInUserID = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value;
-            string tenantID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value;
-            string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-
-            // get a token for the Graph without triggering any user interaction (from the cache, via multi-resource refresh token, etc)
-            ClientCredential clientcred = new ClientCredential(clientId, appKey);
-            // initialize AuthenticationContext with the token cache of the currently signed in user, as kept in the app's database
-            AuthenticationContext authenticationContext = new AuthenticationContext(aadInstance + tenantID, new ADALTokenCache(signedInUserID));
-            AuthenticationResult authenticationResult = await authenticationContext.AcquireTokenSilentAsync(graphResourceID, clientcred, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
-            return authenticationResult.AccessToken;
-        }
+       
     }
-    }
+}

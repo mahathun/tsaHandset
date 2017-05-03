@@ -17,7 +17,7 @@
 
         </div>
         <div class="col-md-6" style="text-align:center">
-            <a href="#" class="btn btn-block btn-raised btn-danger" onclick="showSection('accepted')">
+            <a href="#" class="btn btn-block btn-raised btn-danger" onclick="showSection('user')">
                 <i class="material-icons">feedback</i><br />
                 My Request
 
@@ -72,6 +72,23 @@
             </a>
         </div>
 
+        @if (Model.isISGMember)
+        {
+
+            <div class="col-md-4" style="text-align:center">
+                <a href="#isgTeamRequestsSection" class="btn btn-block btn-raised btn-warning" onclick="showSection('isg', this)">
+                    <div class="row tile">
+                        <div class="col-xs-4">
+                            <div><i class="material-icons">description</i></div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div><h4>@Model.RequestAssignedToiSG.Count()</h4>Requests need<br /> attention</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+
 
     </div>
     
@@ -103,7 +120,7 @@
                            <tr>
                                <td>@requst.RequestUserName</td>
                                <td>@requst.RequestDate.ToShortDateString()</td>
-                               <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
+                               <td>@if (requst.ApprovedDate.ToString() != "") { @requst.ApprovedDate.Value.ToShortDateString(); }</td>
                                <td>@requst.Progress.ProgressLevelName</td>
                                <td>
                                    
@@ -158,7 +175,7 @@
                                 <tr>
                                     <td>@requst.RequestUserName</td>
                                     <td>@requst.RequestDate.ToShortDateString()</td>
-                                    <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
+                                    <td>@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
                                     <td>@requst.Progress.ProgressLevelName</td>
                                     <td>
 
@@ -214,7 +231,7 @@
                                 <tr>
                                     <td>@requst.RequestUserName</td>
                                     <td>@requst.RequestDate.ToShortDateString()</td>
-                                    <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
+                                    <td>@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
                                     <td>@requst.Progress.ProgressLevelName</td>
                                     <td>
 
@@ -269,7 +286,7 @@
                                 <tr>
                                     <td>@requst.RequestUserName</td>
                                     <td>@requst.RequestDate.ToShortDateString()</td>
-                                    <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
+                                    <td>@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
                                     <td>@requst.Progress.ProgressLevelName</td>
                                     <td>
 
@@ -370,6 +387,48 @@
 </div>
 
 
+
+@if (Model.isISGMember)
+{
+    <!-- SECTION -  Requests assigned to the team iSG-->
+    <div class="row" id="isgTeamRequestsSection">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Requests need attention by the team iSG</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="isgTeamRequestsTable" class="table table-striped table-hover">
+                        <thead>
+                        <th>Name</th>
+                        <th>Requested Date</th>
+                        <th>Aporoved Date</th>
+                        <th>Status</th>
+
+                        </thead>
+                        <tbody>
+                            @foreach (var requst in Model.RequestAssignedToiSG)
+                            {
+
+                                <tr>
+                                    <td>@requst.RequestUserName</td>
+                                    <td>@requst.RequestDate.ToShortDateString()</td>
+                                    <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
+                                    <td>@requst.Progress.ProgressLevelName</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @section scripts{
     <script>
         $(document).ready(function () {
@@ -377,12 +436,14 @@
             $("#allRequestsTable").DataTable();
             $("#pendingRequestsTable").DataTable();
             $("#acceptedRequestsTable").DataTable();
+            $("#isgTeamRequestsTable").DataTable();
 
             //hiding the sections on initial load
             $("#allRequestsSection").hide();
             $("#pendingRequestsSection").hide();
             $("#acceptedRequestsSection").hide();
             $("#userRequestsSection").hide();
+            $("#isgTeamRequestsSection").hide();
         });
 
         function requestAction(el) {
@@ -399,6 +460,7 @@
                     $("#pendingRequestsSection").hide(200);
                     $("#acceptedRequestsSection").hide(200);
                     $("#userRequestsSection").hide(200);
+                    $("#isgTeamRequestsSection").hide(200);
 
                     
                     break;
@@ -407,6 +469,7 @@
                     $("#pendingRequestsSection").show(200);
                     $("#acceptedRequestsSection").hide(200);
                     $("#userRequestsSection").hide(200);
+                    $("#isgTeamRequestsSection").hide(200);
 
                     break;
                 case 'accepted':
@@ -414,6 +477,7 @@
                     $("#pendingRequestsSection").hide(200);
                     $("#acceptedRequestsSection").show(200);
                     $("#userRequestsSection").hide(200);
+                    $("#isgTeamRequestsSection").hide(200);
 
                     break;
                 case 'user':
@@ -421,6 +485,15 @@
                     $("#pendingRequestsSection").hide(200);
                     $("#acceptedRequestsSection").hide(200);
                     $("#userRequestsSection").show(200);
+                    $("#isgTeamRequestsSection").hide(200);
+
+                    break;
+                case 'isg':
+                    $("#allRequestsSection").hide(200);
+                    $("#pendingRequestsSection").hide(200);
+                    $("#acceptedRequestsSection").hide(200);
+                    $("#userRequestsSection").hide(200);
+                    $("#isgTeamRequestsSection").show(200);
                     break;
             }
         }

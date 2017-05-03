@@ -1,6 +1,6 @@
 ﻿@model TSAHandset.ViewModel.HomeViewModel
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Portal Home";
 }
 
 <div class="jumbotron">
@@ -21,11 +21,38 @@
 
             </a>
         </div>
-     
-       
+
+
    </div>
     
 </div>
+
+@if (Model.isISGMember)
+{
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Overview</h2>
+        </div>
+        <div class="col-md-12">
+
+            <div class="col-md-4" style="text-align:center">
+                <a href="#isgTeamRequestsSection" class="btn btn-block btn-raised btn-warning" onclick="showSection('isg', this)">
+                    <div class="row tile">
+                        <div class="col-xs-4">
+                            <div><i class="material-icons">description</i></div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div><h4>@Model.RequestAssignedToiSG.Count()</h4>Requests need<br/> attention</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <br />
+}
 
 
 <!-- SECTION - user request -->
@@ -50,16 +77,15 @@
                     <tbody>
                         @foreach (var requst in Model.UserRequests)
                         {
-                            if (requst.ProgressId == 1)
-                            {
+
                                 <tr>
                                     <td>@requst.RequestUserName</td>
                                     <td>@requst.RequestDate.ToShortDateString()</td>
-                                    <td>@if (requst.ApprovedDate != null) { requst.ApprovedDate.Value.ToShortDateString(); }</td>
+                                    <td>@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
                                     <td>@requst.Progress.ProgressLevelName</td>
                                    
                                 </tr>
-                            }
+                            
                         }
                     </tbody>
                 </table>
@@ -68,24 +94,131 @@
     </div>
 </div>
 
+
+
+
+@if (Model.isISGMember)
+{
+    <!-- SECTION -  Requests assigned to the team iSG-->
+    <div class="row" id="isgTeamRequestsSection">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Requests need attention by the team iSG</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="isgTeamRequestsTable" class="table table-striped table-hover">
+                        <thead>
+                        <th>Name</th>
+                        <th>Requested Date</th>
+                        <th>Aporoved Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        </thead>
+                        <tbody>
+                            @foreach (var requst in Model.RequestAssignedToiSG)
+                            {
+                          
+                                    <tr>
+                                        <td>@requst.RequestUserName</td>
+                                        <td>@requst.RequestDate.ToShortDateString()</td>
+                                        <td>@if (requst.ApprovedDate.ToString() != ""){ @requst.ApprovedDate.Value.ToShortDateString();}</td>
+                                        <td>@requst.Progress.ProgressLevelName</td>
+                                        <td>
+
+
+
+
+                                            <span class="input-group-btn">
+                                                <button type="button" id="completeRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-success" data-toggle="modal" data-target="#complete-request-dialog">
+                                                    <i class="material-icons">thumb_up</i> Complete
+                                                </button>
+
+                                                
+                                            </span>
+                                        </td>
+
+                                    </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- complete action modal-->
+    <div id="complete-request-dialog" class="modal fade" tabindex="-1" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Complete Request</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <div class="col-xs-12">
+                            <div class="col-xs-3">
+                                <i class="material-icons" style="color:#4caf50; font-size:5em;">check_circle</i>
+
+                            </div>
+                            <div class="col-xs-9" style="height:5em;">
+                                <div style="position:relative;top:50%;transform:translateY(-50%)">Do you want to complete this requet?</div>
+
+                            </div>
+                        </div>
+                    </p>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <a id="requestCompletedActionLink" href="" class="btn btn-success btn-raised">Yes</a>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+
 @section scripts{
     <script>
         $(document).ready(function () {
+            //initialising the datatables
+            $("#isgTeamRequestsTable").DataTable();
+
+
             //hiding the sections on initial load
             $("#userRequestsSection").hide();
+            $("#isgTeamRequestsSection").hide();
 
 
         });
 
 
+        function requestAction(el) {
+            $('#requestCompletedActionLink').attr('href', "/Request/CompleteRequest/" + $(el).data("id"));
+            
+        }
+
         function showSection(section, el) {
             switch (section) {
                 case 'user':
-                    $("#allRequestsSection").hide(200);
-                    $("#pendingRequestsSection").hide(200);
-                    $("#acceptedRequestsSection").hide(200);
+                    $("#isgTeamRequestsSection").hide(200);
                     $("#userRequestsSection").show(200);
                     break;
+                case 'isg':
+                    $("#isgTeamRequestsSection").show(200);
+                    $("#userRequestsSection").hide(200);
+                    break;
+
 
             }
         }

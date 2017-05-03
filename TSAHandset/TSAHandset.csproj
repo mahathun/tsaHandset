@@ -194,6 +194,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\UserProfileController.cs" />
@@ -263,6 +264,14 @@
     <Compile Include="Migrations\201705030402048_seedingHandsetImageUrls.cs" />
     <Compile Include="Migrations\201705030402048_seedingHandsetImageUrls.Designer.cs">
       <DependentUpon>201705030402048_seedingHandsetImageUrls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705031256359_addedConnectionsTable.cs" />
+    <Compile Include="Migrations\201705031256359_addedConnectionsTable.Designer.cs">
+      <DependentUpon>201705031256359_addedConnectionsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.cs" />
+    <Compile Include="Migrations\201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.Designer.cs">
+      <DependentUpon>201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdalTokenCache.cs" />
@@ -497,9 +506,11 @@
     <Content Include="Views\Request\New.cshtml" />
     <Content Include="Views\Home\AdminIndex.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />
+    <Content Include="Views\Shared\Unauthorized.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -564,6 +575,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705030402048_seedingHandsetImageUrls.resx">
       <DependentUpon>201705030402048_seedingHandsetImageUrls.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705031256359_addedConnectionsTable.resx">
+      <DependentUpon>201705031256359_addedConnectionsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.resx">
+      <DependentUpon>201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

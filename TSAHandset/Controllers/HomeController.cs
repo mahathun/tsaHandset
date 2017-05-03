@@ -14,13 +14,10 @@ using TSAHandset.ViewModel;
 namespace TSAHandset.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private ApplicationDbContext _context ;
-        private string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
-        private string appKey = ConfigurationManager.AppSettings["ida:ClientSecret"];
-        private string aadInstance = ConfigurationManager.AppSettings["ida:AADInstance"];
-        private string graphResourceID = "https://graph.windows.net";
+        
 
         public HomeController()
         {
@@ -35,37 +32,23 @@ namespace TSAHandset.Controllers
         //DISPLAYING MAIN LANDING PAGE
         public async Task<ActionResult> Index()
         {
-
-            string tenantID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value;
-            string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
             try
             {
-                Uri servicePointUri = new Uri(graphResourceID);
-                Uri serviceRoot = new Uri(servicePointUri, tenantID);
-                ActiveDirectoryClient activeDirectoryClient = new ActiveDirectoryClient(serviceRoot,
-                      async () => await GetTokenForApplication());
-
-                ActiveDirectoryClient activeDirectoryClient1 = new ActiveDirectoryClient(serviceRoot,
-                      async () => await GetTokenForApplication());
-
-                // use the token for querying the graph to get the user details
-
-                var userResult = await activeDirectoryClient.Users
-                    .Where(u => u.ObjectId.Equals(userObjectID))
-                    .ExecuteAsync();
-
-                var groupResult = await activeDirectoryClient1.Groups.Expand(u=>u.Owners).ExecuteAsync();
+                //get all the security groups(Departments)
+                var groupResult = await GetGroupsWithOwner();
 
                 //current logged in user
-                IUser user = userResult.CurrentPage.ToList().First();
-                List<IGroup> groups = groupResult.CurrentPage.ToList();
+                IUser user = await GetLoggedInUser();
+                List<IGroup> groups = groupResult;
 
                 bool isAnAdmin = false;
+                bool isISGMember = await isAnISGMember();
+
                 List<IGroup> listOfGroupsAdminOf = new List<IGroup>();
+      
 
                 foreach(var group in groups)
                 {
-
                     foreach(var owner in group.Owners.CurrentPage)
                     {
                         if(owner.ObjectId == user.ObjectId)
@@ -76,6 +59,7 @@ namespace TSAHandset.Controllers
                     }
 
                 }
+
 
                 if (isAnAdmin)
                 {
@@ -94,7 +78,9 @@ namespace TSAHandset.Controllers
                         PendingRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 1).ToList(),
                         AcceptedRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 2).ToList(),
                         RejectedRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 3).ToList(),
-                        UserRequests = _context.Requests.Where(r=>r.RequestUserId == user.ObjectId).ToList()
+                        UserRequests = _context.Requests.Where(r=>r.RequestUserId == user.ObjectId).ToList(),
+                        isISGMember = isISGMember,
+                        RequestAssignedToiSG = _context.Requests.Include("Progress").ToList().Where(r => r.ProgressId == 2).ToList()
                     };
                     
                     return View("AdminIndex", homeViewModel);
@@ -105,8 +91,11 @@ namespace TSAHandset.Controllers
                     var homeViewModel = new HomeViewModel()
                     {
                         User = user,
-                        UserRequests = requests
+                        UserRequests = requests,
+                        isISGMember =isISGMember,
+                        RequestAssignedToiSG = _context.Requests.Include("Progress").ToList().Where(r=>r.ProgressId==2).ToList()
                     };
+
                     return View("Index",homeViewModel);
                 }
 
@@ -139,18 +128,6 @@ namespace TSAHandset.Controllers
 
             return View();
         }
-        public async Task<string> GetTokenForApplication()
-        {
-            string signedInUserID = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value;
-            string tenantID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value;
-            string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
 
-            // get a token for the Graph without triggering any user interaction (from the cache, via multi-resource refresh token, etc)
-            ClientCredential clientcred = new ClientCredential(clientId, appKey);
-            // initialize AuthenticationContext with the token cache of the currently signed in user, as kept in the app's database
-            AuthenticationContext authenticationContext = new AuthenticationContext(aadInstance + tenantID, new ADALTokenCache(signedInUserID));
-            AuthenticationResult authenticationResult = await authenticationContext.AcquireTokenSilentAsync(graphResourceID, clientcred, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
-            return authenticationResult.AccessToken;
-        }
     }
 }

@@ -13,6 +13,8 @@ namespace TSAHandset.ViewModel
         public List<Request> AcceptedRequests { get; set; }
         public List<Request> RejectedRequests { get; set; }
         public List<Request> UserRequests { get; set; }
+        public List<Request> RequestAssignedToiSG { get; set; }
+        public bool isISGMember { get; set; }
 
     }
 }
