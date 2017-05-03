@@ -17,21 +17,41 @@
                </blockquote>
        </div>
 
-       @if (Request.IsAuthenticated)
+       @if (Request.IsAuthenticated && Model.User !=null)
        {
         <div class="col-md-12 mainSideBarFlexDivUser">
-            <div class="col-md-12">
-                Department : @Model.User.Department
-            </div>
-            <div class="col-md-12">
-                Job Title : @Model.User.JobTitle
-            </div>
-            <div class="col-md-12">
-                Your Manager : @Model.User.Manager
-            </div>
-            <div class="col-md-12">
-                Mobile : @Model.User.Mobile
-            </div>
+            @if (Model.User.Department != null)
+            {
+                <div class="col-md-12">
+                    Department : @Model.User.Department
+                </div>
+            }
+            @if (Model.User.JobTitle != null)
+            {
+                <div class="col-md-12">
+                    Job Title : @Model.User.JobTitle
+                </div>
+
+
+            }
+            @*@if (Model.User.Manager != null)
+            {
+                <div class="col-md-12">
+                    Your Manager : @Model.User.Manager
+                </div>
+
+
+            }*@
+          
+            @if (Model.User.Mobile != null)
+            {
+                <div class="col-md-12">
+                    Mobile : @Model.User.Mobile
+                </div>
+
+
+            }
+
 
            
         </div>

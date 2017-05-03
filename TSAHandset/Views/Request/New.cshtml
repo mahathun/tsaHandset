@@ -11,8 +11,8 @@
    {
 
     <div class="form-horizontal">
-
-
+        @Html.ValidationSummary(false)
+        
         <div class="form-group">
             <label class="col-md-2 control-label">Request type</label>
 
@@ -20,7 +20,7 @@
 
                 @for (var i = 0; i < Model.RequestTypes.Count; i++)
                 {
-                    <div class="radio">
+                    <div class="radio requestTypeRadioButtonDiv">
                         <label>
                             @if (Model.RequestTypes[i].Id == 1)
                             {
@@ -35,6 +35,7 @@
 
 
                         </label>
+                        
                     </div>
 
                 }
@@ -287,17 +288,29 @@
         function changeRequestType(el) {
             
             switch ($(el)[0].value) {
-                case "1":
+                case "1"://Connection only
                     $('#plansSection').show();
                     $('#handsetsSection').hide();
                     break;
-                case "2":
+                case "2"://handset only
                     $('#plansSection').hide();
                     $('#handsetsSection').show();
                     break;
-                case "3":
+                case "3"://both connection and handset
                     $('#plansSection').show();
                     $('#handsetsSection').show();
+                    break;
+                case "4"://change plan between TSA Plans
+                    $('#plansSection').show();
+                    $('#handsetsSection').hide();
+                    break;
+                case "5"://Move number to a TSA Plan
+                    $('#plansSection').show();
+                    $('#handsetsSection').hide();
+                    break;
+                case "6"://Move number to  a personal plan from a TSA plan
+                    $('#plansSection').hide();
+                    $('#handsetsSection').hide();
                     break;
             }
             

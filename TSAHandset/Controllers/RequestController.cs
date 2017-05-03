@@ -37,7 +37,7 @@ namespace TSAHandset.Controllers
         }
 
 
-        //NEW REQUESTS
+        //DISPLAY NEW REQUEST PAGE
         public async Task<ActionResult> New()
         {
             
@@ -58,17 +58,18 @@ namespace TSAHandset.Controllers
         //SAVING NEW REQUESTS
         public async Task<ActionResult> Submit(Request request)
         {
+            var requestViewModel = new RequestFormViewModel()
+            {
+                User = await GetLoggedInUser(),
+                Request = request,
+                Handsets = _context.Handsets.ToList(),
+                Plans = _context.Plans.ToList(),
+                RequestTypes = _context.RequestTypes.ToList()
+            };
+
             if (!ModelState.IsValid)
             {
-                var requestViewModel = new RequestFormViewModel()
-                {
-                    Request = request,
-                    Handsets = _context.Handsets.ToList(),
-                    Plans = _context.Plans.ToList(),
-                    RequestTypes = _context.RequestTypes.ToList()
-                };
-
-                return View("New", requestViewModel);
+               return View("New", requestViewModel);
 
             }
             else
@@ -105,6 +106,35 @@ namespace TSAHandset.Controllers
                             newRequest.SecurityGroupId = user.MemberOf.CurrentPage.First().ObjectId;
                             newRequest.PlanId = request.PlanId;
                             newRequest.HandsetId = request.HandsetId;
+
+                            break;
+                        case 4: //Change an existing Plan
+                            var connection = _context.Connections.Where(c => c.UserId == user.ObjectId).ToList();
+
+                            if (connection.Count == 0)
+                            {
+                                ModelState.AddModelError("RequestTypeId", "You need to be on an existing TSA plan in order to change the plan");
+                                return View("New", requestViewModel);
+                            }
+
+                            newRequest.SecurityGroupId = user.MemberOf.CurrentPage.First().ObjectId;
+                            newRequest.PlanId = request.PlanId;
+
+                            break;
+                        case 5://Move number to a TSA plan
+                            newRequest.PlanId = request.PlanId;
+                            newRequest.SecurityGroupId = user.MemberOf.CurrentPage.First().ObjectId;
+                            break;
+                        case 6://Move number from a TSA plan
+                            var existingConnections = _context.Connections.Where(c => c.UserId == user.ObjectId).ToList();
+                            if (existingConnections.Count == 0)
+                            {
+                                ModelState.AddModelError("RequestTypeId", "You need to be on an existing TSA plan in order to Move the Number");
+                                return View("New", requestViewModel);
+                            }
+
+                            newRequest.PlanId = 0;
+                            newRequest.SecurityGroupId = user.MemberOf.CurrentPage.First().ObjectId;
 
                             break;
                         default:

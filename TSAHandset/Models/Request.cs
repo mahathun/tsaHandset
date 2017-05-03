@@ -24,7 +24,7 @@ namespace TSAHandset.Models
         public byte ProgressId { get; set; }
         public RequestType RequestType { get; set; }
         [Required]
-        [Range(1,3,ErrorMessage ="Request Type is Required")]
+        [Range(1,6,ErrorMessage ="Request Type is Required")]
         public byte RequestTypeId { get; set; }
 
     }

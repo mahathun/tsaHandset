@@ -55,7 +55,8 @@ textarea {
     color: #8385ef;
     flex: 2;
     text-align: center;
-    font-size: 1.3em;
+    font-size: 1.1em;
+    font-weight:bolder;
 }
 
 
@@ -78,3 +79,12 @@ textarea {
     font-size:48px;
 }
 
+.requestTypeRadioButtonDiv{
+    padding-right:1.6em;
+}
+
+.validation-summary-errors ul{
+    list-style:none;
+    color:red;
+    font-size:.8em;
+}

@@ -273,6 +273,10 @@
     <Compile Include="Migrations\201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.Designer.cs">
       <DependentUpon>201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705031403173_populatingRequestTypesWithChangePlanTypeAndMoveNumber.cs" />
+    <Compile Include="Migrations\201705031403173_populatingRequestTypesWithChangePlanTypeAndMoveNumber.Designer.cs">
+      <DependentUpon>201705031403173_populatingRequestTypesWithChangePlanTypeAndMoveNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdalTokenCache.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -507,6 +511,7 @@
     <Content Include="Views\Home\AdminIndex.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\Shared\Unauthorized.cshtml" />
+    <Content Include="Views\Shared\Relogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -581,6 +586,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.resx">
       <DependentUpon>201705031308294_updatedConnectionModelToAllowNullsForPlanIdAndHandsetId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705031403173_populatingRequestTypesWithChangePlanTypeAndMoveNumber.resx">
+      <DependentUpon>201705031403173_populatingRequestTypesWithChangePlanTypeAndMoveNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
