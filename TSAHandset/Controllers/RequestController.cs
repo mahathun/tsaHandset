@@ -281,6 +281,7 @@ namespace TSAHandset.Controllers
             }
 
             request.ProgressId = 4;//completed
+            request.CompletedDate = DateTime.Now;
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Home");

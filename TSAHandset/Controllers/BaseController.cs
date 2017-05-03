@@ -16,11 +16,26 @@ namespace TSAHandset.Controllers
     [Authorize]
     public class BaseController : Controller
     {
+        protected ApplicationDbContext _context;
+
+
         protected string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
         protected string appKey = ConfigurationManager.AppSettings["ida:ClientSecret"];
         protected string aadInstance = ConfigurationManager.AppSettings["ida:AADInstance"];
         protected string graphResourceID = "https://graph.windows.net";
         protected string teamISGGroupId = "7a20c5a2-b1e9-4206-92be-3b421fc9f957";//security group id of the team iSG group
+
+
+
+        protected BaseController()
+        {
+            _context = new ApplicationDbContext();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
         //GET the logged in User with MemberOf expanded
         protected async Task<IUser> GetLoggedInUser()
@@ -96,6 +111,22 @@ namespace TSAHandset.Controllers
             AuthenticationContext authenticationContext = new AuthenticationContext(aadInstance + tenantID, new ADALTokenCache(signedInUserID));
             AuthenticationResult authenticationResult = await authenticationContext.AcquireTokenSilentAsync(graphResourceID, clientcred, new UserIdentifier(userObjectID, UserIdentifierType.UniqueId));
             return authenticationResult.AccessToken;
+        }
+
+        //GET Avarage duration in days to complete a request
+        public int GetAverageDurationInDays()
+        {
+            int days = 0;
+            TimeSpan totalDuration = new TimeSpan();
+            var requests = _context.Requests.Include("Progress").Where(r => r.ProgressId == 4).ToList();
+
+            foreach(var request in requests)
+            {
+                totalDuration += (DateTime)request.CompletedDate - request.RequestDate;
+            }
+
+            return (totalDuration ==null || totalDuration.Days == 0) ? 0 : totalDuration.Days / requests.Count;
+            
         }
 
         //Check if the logged in user is a member of the team iSG

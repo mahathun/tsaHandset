@@ -16,18 +16,7 @@ namespace TSAHandset.Controllers
     [Authorize]
     public class HomeController : BaseController
     {
-        private ApplicationDbContext _context ;
-        
-
-        public HomeController()
-        {
-            _context = new ApplicationDbContext();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            _context.Dispose();
-        }
+       
 
         //DISPLAYING MAIN LANDING PAGE
         public async Task<ActionResult> Index()
@@ -72,8 +61,9 @@ namespace TSAHandset.Controllers
                     }
 
                     var homeViewModel = new HomeViewModel() {
-                        
+
                         User = user,
+                        AverageDurationToCompleteARequestInDays = GetAverageDurationInDays(),
                         AllRequests = allRequestsAssignedToTheAdmin,
                         PendingRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 1).ToList(),
                         AcceptedRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 2).ToList(),
@@ -91,6 +81,7 @@ namespace TSAHandset.Controllers
                     var homeViewModel = new HomeViewModel()
                     {
                         User = user,
+                        AverageDurationToCompleteARequestInDays = GetAverageDurationInDays(),
                         UserRequests = requests,
                         isISGMember =isISGMember,
                         RequestAssignedToiSG = _context.Requests.Include("Progress").ToList().Where(r=>r.ProgressId==2).ToList()

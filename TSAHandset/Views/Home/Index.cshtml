@@ -36,7 +36,14 @@
             </a>
         </div>
 
-
+         @if (Model.AverageDurationToCompleteARequestInDays > 0)
+         {
+           <div class="col-md-12">
+               <p style="font-size:.7em;color:gray">
+                   * Current average time frame for a request to complete is @Model.AverageDurationToCompleteARequestInDays days
+               </p>
+           </div>
+         }
    </div>
     
 </div>

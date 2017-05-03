@@ -9,5 +9,6 @@ namespace TSAHandset.ViewModel
     public class BaseViewModel
     {
         public IUser User { get; set; }
+        public int AverageDurationToCompleteARequestInDays { get; set; }
     }
 }

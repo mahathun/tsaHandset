@@ -23,6 +23,15 @@
 
             </a>
         </div>
+
+        @if (Model.AverageDurationToCompleteARequestInDays > 0)
+        {
+            <div class="col-md-12">
+                <p style="font-size:.7em;color:gray">
+                    * Current average time frame for a request to complete is @Model.AverageDurationToCompleteARequestInDays days
+                </p>
+            </div>
+        }
     </div>
 
 </div>
@@ -124,18 +133,21 @@
                                <td>@requst.Progress.ProgressLevelName</td>
                                <td>
                                    
-                                       
-                                   
+                                   @if (requst.ProgressId != 4)
+                                   {
+                                    <span class="input-group-btn">
+                                        <button type="button" id="approveRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-success" data-toggle="modal" data-target="#accept-request-dialog">
+                                            <i class="material-icons">thumb_up</i> Approve
+                                        </button>
 
-                                   <span class="input-group-btn">
-                                       <button type="button" id="approveRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-success" data-toggle="modal" data-target="#accept-request-dialog">
-                                           <i class="material-icons">thumb_up</i> Approve
-                                       </button>
+                                        <button type="button" id="rejectRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#reject-request-dialog">
+                                            <i class="material-icons">thumb_down</i> Reject
+                                        </button>
+                                    </span>
+                                   }
 
-                                       <button type="button" id="rejectRequest" data-id="@requst.Id" onclick="requestAction(this)" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#reject-request-dialog">
-                                           <i class="material-icons">thumb_down</i> Reject
-                                       </button>
-                                   </span>
+
+
                                </td>
                            </tr>
                        }
