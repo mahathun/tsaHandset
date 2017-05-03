@@ -3,13 +3,27 @@
 {
     <text>
          <ul class="nav navbar-nav navbar-right">
-
+            
+                 
+           
              <li>
                  @Html.ActionLink("Hello " + ((Model.User.DisplayName!="")? Model.User.DisplayName:Model.User.UserPrincipalName )+ " !", "Index", "UserProfile", routeValues: null, htmlAttributes: null)
              </li>
             <li>
                 @Html.ActionLink("Sign out", "SignOut", "Account")
             </li>
+
+             <li class="dropdown">
+                 <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                     <i class="material-icons">notifications</i>
+                     <span class="badge" style="background-color:red">3</span>
+                     <b class="caret"></b>
+                 </a>
+                 <ul class="dropdown-menu">
+                     <li><a href="javascript:void(0)">Your request on 12/5/2017 has been updated</a></li>
+                   
+                 </ul>
+             </li>
         </ul>
     </text>
 }
