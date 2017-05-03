@@ -20,6 +20,7 @@ namespace TSAHandset.Models
         public short BatteryInMAH { get; set; }
         public string Processor { get; set; }
         public string OS { get; set; }
+        public string ImageUrl { get; set; }
 
     }
 }

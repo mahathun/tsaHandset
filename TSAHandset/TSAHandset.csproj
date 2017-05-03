@@ -256,6 +256,14 @@
     <Compile Include="Migrations\201704301843512_addedRequestUserNameFieldToTheRequestModel2.Designer.cs">
       <DependentUpon>201704301843512_addedRequestUserNameFieldToTheRequestModel2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705030352501_addedHandsetImageUrl.cs" />
+    <Compile Include="Migrations\201705030352501_addedHandsetImageUrl.Designer.cs">
+      <DependentUpon>201705030352501_addedHandsetImageUrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705030402048_seedingHandsetImageUrls.cs" />
+    <Compile Include="Migrations\201705030402048_seedingHandsetImageUrls.Designer.cs">
+      <DependentUpon>201705030402048_seedingHandsetImageUrls.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdalTokenCache.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -550,6 +558,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704301843512_addedRequestUserNameFieldToTheRequestModel2.resx">
       <DependentUpon>201704301843512_addedRequestUserNameFieldToTheRequestModel2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705030352501_addedHandsetImageUrl.resx">
+      <DependentUpon>201705030352501_addedHandsetImageUrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705030402048_seedingHandsetImageUrls.resx">
+      <DependentUpon>201705030402048_seedingHandsetImageUrls.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
