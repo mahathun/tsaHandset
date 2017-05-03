@@ -29,6 +29,25 @@ textarea {
    height:100%;
    padding:2em;
    position:fixed;
+   padding-bottom:100px;
+}
+
+.mainSideBarFlexDiv {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    justify-content: space-between;
+
+}
+.mainSideBarFlexDivLogo{
+    flex:1;
+}
+.mainSideBarFlexDivUser {
+    color: #8385ef;
+    flex: 2;
+    text-align: center;
+    font-size: 1.3em;
 }
 
 .sidebarLogo{
@@ -49,3 +68,4 @@ textarea {
 .tile div>i{
     font-size:48px;
 }
+

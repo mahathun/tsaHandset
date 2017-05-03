@@ -1,0 +1,31 @@
+﻿@model TSAHandset.ViewModel.BaseViewModel
+
+<div class="col-md-3 mainSideBar hidden-sm hidden-xs">
+    &nbsp;
+   <div class="mainSideBarFlexDiv">
+       <div class="mainSideBarFlexDivLogo">
+           <img class="img-responsive sidebarLogo" src="~/Images/tsa.png" />
+
+       </div>
+
+       @if (Request.IsAuthenticated)
+       {
+        <div class="col-md-12 mainSideBarFlexDivUser">
+            <div class="col-md-12">
+                Department : @Model.User.Department
+            </div>
+            <div class="col-md-12">
+                Job Title : @Model.User.JobTitle
+            </div>
+            <div class="col-md-12">
+                Your Manager : @Model.User.Manager
+            </div>
+            <div class="col-md-12">
+                Mobile : @Model.User.Mobile
+            </div>
+
+           
+        </div>
+       }
+   </div>
+</div>

@@ -88,6 +88,8 @@ namespace TSAHandset.Controllers
                     }
 
                     var homeViewModel = new HomeViewModel() {
+                        
+                        User = user,
                         AllRequests = allRequestsAssignedToTheAdmin,
                         PendingRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 1).ToList(),
                         AcceptedRequests = allRequestsAssignedToTheAdmin.Where(r => r.ProgressId == 2).ToList(),
@@ -102,6 +104,7 @@ namespace TSAHandset.Controllers
                     var requests = _context.Requests.Include("Progress").Where(r => r.RequestUserId == user.ObjectId).ToList();
                     var homeViewModel = new HomeViewModel()
                     {
+                        User = user,
                         UserRequests = requests
                     };
                     return View("Index",homeViewModel);

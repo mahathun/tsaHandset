@@ -12,6 +12,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using TSAHandset.Models;
+using TSAHandset.ViewModel;
 
 namespace TSAHandset.Controllers
 {
@@ -43,7 +44,11 @@ namespace TSAHandset.Controllers
                     .ExecuteAsync();
                 IUser user = result.CurrentPage.ToList().First();
 
-                return View(user);
+                var baseViewModel = new BaseViewModel()
+                {
+                    User = user,
+                };
+                return View(baseViewModel);
             }
             catch (AdalException)
             {

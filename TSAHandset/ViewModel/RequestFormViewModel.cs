@@ -6,7 +6,7 @@ using TSAHandset.Models;
 
 namespace TSAHandset.ViewModel
 {
-    public class RequestFormViewModel
+    public class RequestFormViewModel :BaseViewModel
     {
         public List<Plan> Plans { get; set; }
         public List<Handset> Handsets { get; set; }

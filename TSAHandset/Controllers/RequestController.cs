@@ -41,12 +41,13 @@ namespace TSAHandset.Controllers
 
 
         //NEW REQUESTS
-        public ActionResult New()
+        public async Task<ActionResult> New()
         {
+            
 
             var requestViewModel = new RequestFormViewModel()
             {
-                
+                User = await GetLoggedInUser(),   
                 Request = new Request(),
                 Plans = _context.Plans.ToList(),
                 Handsets = _context.Handsets.ToList(),

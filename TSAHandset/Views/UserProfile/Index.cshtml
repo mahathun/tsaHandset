@@ -1,5 +1,5 @@
-﻿@using Microsoft.Azure.ActiveDirectory.GraphClient
-@model User
+﻿
+@model TSAHandset.ViewModel.BaseViewModel
 
 @{
     ViewBag.Title = "User Profile";
@@ -9,14 +9,35 @@
 <table class="table table-bordered table-striped">
     <tr>
         <td>Display Name</td>
-        <td>@Model.DisplayName</td>
+        <td>@Model.User.DisplayName</td>
     </tr>
     <tr>
         <td>First Name</td>
-        <td>@Model.GivenName</td>
+        <td>@Model.User.GivenName</td>
     </tr>
     <tr>
         <td>Last Name</td>
-        <td>@Model.Surname</td>
+        <td>@Model.User.Surname</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>@Model.User.UserPrincipalName</td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td>@Model.User.StreetAddress</td>
+    </tr>
+
+    <tr>
+        <td>Mobile Number</td>
+        <td>@Model.User.Mobile</td>
+    </tr>
+    <tr>
+        <td>Department</td>
+        <td>@Model.User.Department</td>
+    </tr>
+    <tr>
+        <td>Job Title</td>
+        <td>@Model.User.JobTitle</td>
     </tr>
 </table>

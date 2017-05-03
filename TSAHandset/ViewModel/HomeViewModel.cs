@@ -6,7 +6,7 @@ using TSAHandset.Models;
 
 namespace TSAHandset.ViewModel
 {
-    public class HomeViewModel
+    public class HomeViewModel : BaseViewModel
     {
         public List<Request> AllRequests { get; set; }
         public List<Request> PendingRequests { get; set; }
